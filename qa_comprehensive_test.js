@@ -244,7 +244,7 @@ vm.runInContext(jsModuleContent, sandbox);
 assert(typeof sandbox.window.platformStateStore === 'object', "platformStateStore is defined in window");
 assert(typeof sandbox.window.KazakhtelecomAI === 'object', "KazakhtelecomAI is defined in window");
 assert(Array.isArray(sandbox.window.platformState.appeals), "platformState.appeals is initialized as array");
-assert(sandbox.window.platformState.appeals.length >= 3, `Initial appeals list has ${sandbox.window.platformState.appeals.length} seed items`);
+assert(sandbox.window.platformState.appeals.length === 0, `Initial appeals list is clean (got ${sandbox.window.platformState.appeals.length} items)`);
 
 // ----------------------------------------------------------------------
 // 4. AI CLASSIFICATION & TRIAGE ENGINE AUDIT
@@ -467,6 +467,16 @@ assert(!domElements['modal-region-inspector'].classList.contains('active'), "clo
 // Test Token Tracker & Two-Way Safe Chat
 sandbox.openTokenModal();
 assert(domElements['modal-token-tracker'].classList.contains('active'), "openTokenModal() opens #modal-token-tracker");
+
+// Add test appeal with token for lookup verification
+sandbox.window.platformStateStore.addAppeal({
+  id: "APP-TEST-TOKEN",
+  token: "TK-7842-KZ",
+  regNumber: "ВХ-2026/0942-КАНЦ",
+  categoryTitle: "Охрана труда и СИЗ (HSE-01)",
+  slaRemainingSeconds: 432000,
+  thread: []
+});
 
 domElements['token-search-input'].value = "TK-7842-KZ";
 sandbox.lookupToken();

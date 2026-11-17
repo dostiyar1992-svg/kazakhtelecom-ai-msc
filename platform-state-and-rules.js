@@ -610,140 +610,7 @@ if (typeof global !== 'undefined') {
         { name: "Акмолинская область", rdt: "Северная РДТ", riskScore: 3.2, riskLevel: "low", appealsCount: 8, mainCat: "HSE-01 СИЗ", enps: +40 },
         { name: "г. Астана", rdt: "Центральный аппарат", riskScore: 2.1, riskLevel: "low", appealsCount: 14, mainCat: "TECH-06 ПО", enps: +48 }
       ],
-    appeals: [
-      {
-        id: 1,
-        regNumber: "ВХ-2026/0942-КАНЦ",
-        dispatchSystems: ["СЭД Lotus Notes", "Корп. почта Outlook", "Оперативный контур МСЦ"],
-        submissionChannel: "ONLINE_AI_INTAKE",
-        token: "TK-7842-KZ",
-        date: "12.11.2026 09:30",
-        isAnonymous: true,
-        fio: "— (Анонимно)",
-        division: "ОДС",
-        region: "Атырауская область",
-        categoryCode: "HSE-01",
-        categoryTitle: "Охрана труда и СИЗ",
-        rawText: "Задержка зимней обуви и курток выездным бригадам монтеров АВР более 45 дней. Морозы до -18°C.",
-        formalFabula: "Несоблюдение положений ст. 182 ТК РК и п. 4.2 Коллективного договора. Задержка выдачи зимней экипировки бригадам связи.",
-        recipientDept: "Департамент производственной безопасности (ДПБ)",
-        recipientOfficer: "Смагулов Б.К.",
-        status: "IN_WORK",
-        slaDeadline: "17.11.2026 18:00",
-        slaRemainingSeconds: 431980,
-        riskLevel: "CRITICAL",
-        conflictGuardActive: true,
-        resolutionStage: "MEASURES_TAKEN",
-        resolutionStageTitle: "Приняты оперативные меры",
-        actionTaken: "Оформлен наряд МТС №441 на выдачу 18 комплектов зимней спецодежды и обуви Норма-HSE.",
-        resolutionHistory: [
-          { stage: "REGISTERED", note: "Обращение зарегистрировано в оперативном контуре МСЦ", officer: "ИИ-Ассистент «Айгерим»", date: "12.11.2026 09:30" },
-          { stage: "IN_WORK", note: "Передано на исполнение в Департамент производственной безопасности (ДПБ). Назначен куратор Смагулов Б.К.", officer: "Динара Касымова (EX)", date: "12.11.2026 10:15" },
-          { stage: "MEASURES_TAKEN", note: "Согласована внеочередная отгрузка 18 комплектов спецодежды со склада Сервисной фабрики в Атырау. Срок поставки: до 15.11.2026.", officer: "Смагулов Б.К. (ДПБ)", date: "12.11.2026 14:00" }
-        ],
-        answers: { q1: "Зимняя спецобувь и куртки", q2: "Вся выездная бригада (14 человек)" },
-        messages: [
-          { sender: "Служба EX (Инспектор)", text: "Обращение принято в работу в защищенном контуре. Направлен срочный запрос на склад СФ.", time: "12.11.2026 09:45" }
-        ]
-      },
-      {
-        id: 2,
-        regNumber: "ВХ-2026/0941-КАНЦ",
-        dispatchSystems: ["СЭД Lotus Notes", "Корп. почта Outlook"],
-        submissionChannel: "MANUAL_PAPER",
-        token: "TK-8812-KZ",
-        date: "10.11.2026 14:20",
-        isAnonymous: false,
-        fio: "Искаков Марат А.",
-        division: "ОДС",
-        region: "Абайская область",
-        categoryCode: "PAY-02",
-        categoryTitle: "Оплата труда, премии и надбавки",
-        rawText: "Принуждение к выходу в субботу без табелирования и двойной оплаты труда.",
-        formalFabula: "Нарушение ст. 108 ТК РК (оплата сверхурочной работы). Отсутствие приказов на привлечение к работе в выходные дни.",
-        recipientDept: "Департамент оплаты труда и компенсаций (ДУП)",
-        recipientOfficer: "Ким А.В.",
-        status: "IN_WORK",
-        slaDeadline: "15.11.2026 18:00",
-        slaRemainingSeconds: 104200,
-        riskLevel: "MEDIUM",
-        conflictGuardActive: false,
-        resolutionStage: "INSPECTION",
-        resolutionStageTitle: "Служебное расследование",
-        actionTaken: "Затребованы табели учета рабочего времени и письменные объяснительные начальника ЛКЦ.",
-        resolutionHistory: [
-          { stage: "REGISTERED", note: "Обращение зарегистрировано в СЭД Lotus Notes под № ВХ-2026/0941-КАНЦ", officer: "Гульнара Ахметова (Канцелярия)", date: "10.11.2026 14:20" },
-          { stage: "INSPECTION", note: "Запрошены табели учета ОДС Абайской РДТ за октябрь. Проводится аудит правомерности привлечения к дежурству в выходные дни без приказа.", officer: "Ким А.В. (ДУП)", date: "11.11.2026 11:30" }
-        ],
-        answers: { q1: "За октябрь 2026", q2: "Табель закрывают как 8 часов" },
-        messages: []
-      },
-      {
-        id: 3,
-        regNumber: "ВХ-2026/0938-КАНЦ",
-        dispatchSystems: ["СЭД Lotus Notes", "Служба комплаенс"],
-        submissionChannel: "OUTLOOK_EMAIL",
-        token: "TK-3419-KZ",
-        date: "04.11.2026 09:15",
-        isAnonymous: false,
-        fio: "Смаилов Канат Т.",
-        division: "СФ",
-        region: "Карагандинская область",
-        categoryCode: "TECH-06",
-        categoryTitle: "Инфраструктура, техника и связь",
-        rawText: "Аварийное состояние автопарка УАЗ в Каркаралинском районе. Неисправны тормоза, нет зимней резины.",
-        formalFabula: "Нарушение ст. 23 ТК РК. Предоставление неисправного служебного автотранспорта, создающего угрозу ДТП.",
-        recipientDept: "Транспортная дирекция (СФ)",
-        recipientOfficer: "Алиев Т.Р.",
-        status: "OVERDUE",
-        slaDeadline: "09.11.2026 18:00",
-        slaRemainingSeconds: -14400,
-        riskLevel: "HIGH",
-        conflictGuardActive: false,
-        resolutionStage: "ESCALATED",
-        resolutionStageTitle: "🚨 Эскалировано руководству (Просрочено SLA)",
-        actionTaken: "Вынесено предписание о запрете эксплуатации неисправного служебного автотранспорта УАЗ.",
-        resolutionHistory: [
-          { stage: "REGISTERED", note: "Зарегистрировано под № ВХ-2026/0938-КАНЦ", officer: "Гульнара Ахметова", date: "04.11.2026 09:15" },
-          { stage: "IN_WORK", note: "Направлено в Транспортную дирекцию Сервисной фабрики", officer: "Алиев Т.Р.", date: "05.11.2026 10:00" },
-          { stage: "ESCALATED", note: "Истек регламентный 3-дневный срок SLA. Дело эскалировано Главному директору HRD и Правлению.", officer: "Системный таймер SLA", date: "09.11.2026 18:01" }
-        ],
-        answers: {},
-        messages: []
-      },
-      {
-        id: 4,
-        regNumber: "ВХ-2026/0935-КАНЦ",
-        token: "TK-5521-KZ",
-        date: "02.11.2026 11:00",
-        isAnonymous: false,
-        fio: "Оспанов Берик С.",
-        division: "ДРБ",
-        region: "г. Алматы",
-        categoryCode: "LIFE-07",
-        categoryTitle: "Санитарно-бытовые условия и питание",
-        rawText: "В комнате приема пищи абонентского отдела сломан кондиционер и отсутствует фильтрованная вода.",
-        formalFabula: "Нарушение санитарных норм рабочего места. Необходима замена фильтров питьевой воды и ремонт кондиционера.",
-        recipientDept: "Административно-хозяйственное управление (СФ)",
-        recipientOfficer: "Жумабеков Е.",
-        status: "RESOLVED",
-        slaDeadline: "07.11.2026 18:00",
-        slaRemainingSeconds: 0,
-        riskLevel: "LOW",
-        conflictGuardActive: false,
-        resolutionStage: "RESOLVED",
-        resolutionStageTitle: "✅ Отработано и закрыто",
-        actionTaken: "Акт выполненных работ АХУ №89 от 05.11.2026. Кондиционер отремонтирован, кулер установлен.",
-        resolutionHistory: [
-          { stage: "REGISTERED", note: "Обращение зарегистрировано", officer: "Гульнара Ахметова", date: "02.11.2026 11:00" },
-          { stage: "IN_WORK", note: "Заявка передана инженерам АХУ Сервисной фабрики", officer: "Жумабеков Е.", date: "03.11.2026 09:30" },
-          { stage: "MEASURES_TAKEN", note: "Кондиционер отремонтирован, установлен новый кулер с многоступенчатой фильтрацией воды.", officer: "Жумабеков Е.", date: "05.11.2026 16:45" },
-          { stage: "RESOLVED", note: "Сотрудник подтвердил полное устранение замечаний. Оценка качества отработки: 5 из 5.", officer: "Служба EX (Динара Касымова)", date: "06.11.2026 10:00" }
-        ],
-        answers: {},
-        messages: []
-      }
-    ],
+    appeals: [],
     externalDataSets: [],
     analytics: {
       srsIndex: 64.2,
@@ -770,6 +637,18 @@ if (typeof global !== 'undefined') {
   };
 
   class PlatformStore {
+    loadDemoAppeals() {
+      this.state.appeals = JSON.parse(JSON.stringify(DEMO_SEED_APPEALS));
+      this.notifySubscribers('DEMO_LOADED', this.state.appeals);
+      return this.state.appeals;
+    }
+
+    clearAllAppeals() {
+      this.state.appeals = [];
+      this.notifySubscribers('APPEALS_CLEARED', []);
+      return [];
+    }
+
     constructor(initialState) {
       this.state = JSON.parse(JSON.stringify(initialState));
       this.subscribers = [];
@@ -817,9 +696,9 @@ if (typeof global !== 'undefined') {
     }
 
     addAppeal(appealData) {
-      const nextId = this.state.appeals.length + 1;
-      const regNumber = `ВХ-2026/${String(nextId).padStart(4, '0')}-КАНЦ`;
-      const token = `TK-${Math.floor(1000 + Math.random() * 9000)}-KZ`;
+      const nextId = appealData.id || (this.state.appeals.length + 1);
+      const regNumber = appealData.regNumber || `ВХ-2026/${String(nextId).padStart(4, '0')}-КАНЦ`;
+      const token = appealData.token || `TK-${Math.floor(1000 + Math.random() * 9000)}-KZ`;
 
       const now = new Date();
       const deadlineDate = new Date(now.getTime() + (appealData.slaHours || 120) * 3600 * 1000);

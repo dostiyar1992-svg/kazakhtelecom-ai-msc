@@ -3521,50 +3521,7 @@ def generate_index_html():
                       </div>
                     </td>
                   </tr>
-                  <tr id="campaign-row-q3" onclick="openSurveyDetailsModal('q3')" title="Нажмите на строку для просмотра информации и списка вопросов анкеты">
-                    <td>
-                      <strong style="color:#00468C; font-size:12.5px; cursor:pointer; text-decoration:underline; text-decoration-color:#93C5FD;" onclick="event.stopPropagation(); openSurveyDetailsModal('q3')">Пульс-опрос Q3 2026</strong>
-                      <div style="font-size:11px; color:#64748B;">Психологическая безопасность и условия</div>
-                    </td>
-                    <td>Сентябрь 2026</td>
-                    <td><span style="font-size:11px; color:#64748B;">Push, Outlook</span></td>
-                    <td>Все филиалы</td>
-                    <td><strong style="font-size:11.5px; color:#10B981;">100% (18 400)</strong></td>
-                    <td><strong style="color:#10B981; font-size:12px;">73.8%</strong></td>
-                    <td><span class="badge-status status-done">✔ ЗАВЕРШЕН</span></td>
-                    <td>
-                      <div style="display:flex; gap:6px;">
-                        <button type="button" class="btn-action-primary" style="padding:3px 8px; font-size:11px; background:#00468C;" onclick="event.stopPropagation(); openSurveyDetailsModal('q3')" title="Открыть информацию и список вопросов">
-                          📋 Вопросы
-                        </button>
-                        <button type="button" class="btn-action-secondary" style="padding:3px 8px; font-size:11px;" onclick="event.stopPropagation(); exportSurveyQuestionsToCSV('q3')" title="Выгрузить итоговый отчет">
-                          📥 Отчет
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr id="campaign-row-union" onclick="openSurveyDetailsModal('union')" title="Нажмите на строку для просмотра информации и списка вопросов анкеты">
-                    <td>
-                      <strong style="color:#00468C; font-size:12.5px; cursor:pointer; text-decoration:underline; text-decoration-color:#93C5FD;" onclick="event.stopPropagation(); openSurveyDetailsModal('union')">Опрос профсоюза: Колдоговор</strong>
-                      <div style="font-size:11px; color:#64748B;">Соблюдение социальных льгот и гарантий</div>
-                    </td>
-                    <td>Октябрь – Ноябрь 2026</td>
-                    <td><span style="font-size:11px; color:#64748B;">Портал, SMS</span></td>
-                    <td>ОДС, СФ, ДРБ</td>
-                    <td><strong style="font-size:11.5px;">84.5% (11 200)</strong></td>
-                    <td><strong style="color:#2563EB; font-size:12px;">82.1%</strong></td>
-                    <td><span class="badge-status status-done">✔ ЗАВЕРШЕН</span></td>
-                    <td>
-                      <div style="display:flex; gap:6px;">
-                        <button type="button" class="btn-action-primary" style="padding:3px 8px; font-size:11px; background:#00468C;" onclick="event.stopPropagation(); openSurveyDetailsModal('union')" title="Открыть информацию и список вопросов">
-                          📋 Вопросы
-                        </button>
-                        <button type="button" class="btn-action-secondary" style="padding:3px 8px; font-size:11px;" onclick="event.stopPropagation(); exportSurveyQuestionsToCSV('union')" title="Выгрузить сводку">
-                          📥 Сводка
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+
                 </tbody>
               </table>
             </div>
@@ -3604,7 +3561,7 @@ def generate_index_html():
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
                 <div>
                   <label style="font-size:11.5px; font-weight:700; color:#334155; display:block; margin-bottom:3px;">Название опроса:</label>
-                  <input type="text" id="builder-survey-title" class="form-control" style="font-size:12px;" value="Внеочередной срез: Зимний сезон и СИЗ 2026/2027">
+                  <input type="text" id="builder-survey-title" class="form-control" style="font-size:12px;" value="" placeholder="Введите наименование новой социологической кампании...">
                 </div>
                 <div>
                   <label style="font-size:11.5px; font-weight:700; color:#334155; display:block; margin-bottom:3px;">Целевой дивизион:</label>
@@ -7089,6 +7046,15 @@ def generate_index_html():
         }
         return true;
       });
+
+      if (!filtered.length) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:36px 20px; color:#64748B;">
+          <div style="font-size:26px; margin-bottom:6px;">✨</div>
+          <strong style="color:#1E293B; font-size:13px;">Нет обращений на исполнении</strong>
+          <p style="font-size:11.5px; color:#64748B; margin:4px 0 0 0;">Все поступившие инциденты будут отображаться здесь для выездного аудита и контроля мер</p>
+        </td></tr>`;
+        return;
+      }
 
       tbody.innerHTML = filtered.map(a => {
         const stage = a.resolutionStage || a.status;
@@ -11331,6 +11297,15 @@ def generate_index_html():
         return true;
       });
 
+      if (!filtered.length) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:36px 20px; color:#64748B;">
+          <div style="font-size:26px; margin-bottom:6px;">📭</div>
+          <strong style="color:#1E293B; font-size:13px;">Реестр обращений чист</strong>
+          <p style="font-size:11.5px; color:#64748B; margin:4px 0 0 0;">Новые обращения из онлайн-приемной «Айгерім» и веб-формы будут появляться здесь в реальном времени</p>
+        </td></tr>`;
+        return;
+      }
+
       tbody.innerHTML = filtered.map(a => {
         let badgeHtml = '<span class="badge-status status-work">В работе</span>';
         if (a.status === 'ESCALATED') badgeHtml = '<span class="badge-status status-danger">🚨 Эскалация</span>';
@@ -11705,7 +11680,7 @@ def generate_index_html():
           data: {
             labels: ['HSE-01 Охрана труда / СИЗ', 'PAY-02 Оплата труда', 'OT-03 Сверхурочные', 'MOB-04 Моббинг', 'TECH-06 Инфраструктура'],
             datasets: [{
-              data: [38, 26, 14, 12, 10],
+              data: [0, 0, 0, 0, 0],
               backgroundColor: ['#00468C', '#0284C7', '#6366F1', '#F59E0B', '#EF4444'],
               borderWidth: 2
             }]
