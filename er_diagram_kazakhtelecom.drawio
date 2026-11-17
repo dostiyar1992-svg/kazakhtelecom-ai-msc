@@ -1,0 +1,233 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" version="21.0.0" type="device">
+  <diagram id="ERD_Kazakhtelecom_Appeals" name="ERD_Прием_Обращений_Казахтелеком">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="e_keycloak" value="&lt;b&gt;KEYCLOAK_USER&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#00468C;fontColor=#ffffff;strokeColor=#003366;rounded=1;shadow=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="60" width="280" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="e_keycloak_f0" value="PK  id : UUID" style="text;strokeColor=none;fillColor=#EBF3FA;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontColor=#00468C;fontSize=11;" vertex="1" parent="e_keycloak">
+          <mxGeometry y="28" width="280" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_keycloak_f1" value="    username : VARCHAR(100)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_keycloak">
+          <mxGeometry y="50" width="280" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_keycloak_f2" value="    email : VARCHAR(150)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_keycloak">
+          <mxGeometry y="72" width="280" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_keycloak_f3" value="    full_name : VARCHAR(200)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_keycloak">
+          <mxGeometry y="94" width="280" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_keycloak_f4" value="    role : VARCHAR(50) [CHANCELLERY, ADMIN, EXEC]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_keycloak">
+          <mxGeometry y="116" width="280" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_keycloak_f5" value="    department_code : VARCHAR(50)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_keycloak">
+          <mxGeometry y="138" width="280" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_org" value="&lt;b&gt;ORGANIZATIONAL_UNIT&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#00468C;fontColor=#ffffff;strokeColor=#003366;rounded=1;shadow=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="320" width="280" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="e_org_f0" value="PK  id : UUID" style="text;strokeColor=none;fillColor=#EBF3FA;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontColor=#00468C;fontSize=11;" vertex="1" parent="e_org">
+          <mxGeometry y="28" width="280" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_org_f1" value="FK  parent_id : UUID" style="text;strokeColor=none;fillColor=#F8F9FA;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;fontColor=#555555;fontSize=11;" vertex="1" parent="e_org">
+          <mxGeometry y="50" width="280" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_org_f2" value="    code : VARCHAR(50) [ОДС, ДРБ, РДТ]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_org">
+          <mxGeometry y="72" width="280" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_org_f3" value="    name : VARCHAR(255)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_org">
+          <mxGeometry y="94" width="280" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_org_f4" value="    region : VARCHAR(100) [20 регионов]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_org">
+          <mxGeometry y="116" width="280" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_org_f5" value="    head_user_id : UUID" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_org">
+          <mxGeometry y="138" width="280" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_appeal" value="&lt;b&gt;APPEAL_INCIDENT&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#00468C;fontColor=#ffffff;strokeColor=#003366;rounded=1;shadow=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="440" y="60" width="320" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="e_appeal_f0" value="PK  id : UUID" style="text;strokeColor=none;fillColor=#EBF3FA;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontColor=#00468C;fontSize=11;" vertex="1" parent="e_appeal">
+          <mxGeometry y="28" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_appeal_f1" value="FK  unit_id : UUID" style="text;strokeColor=none;fillColor=#F8F9FA;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;fontColor=#555555;fontSize=11;" vertex="1" parent="e_appeal">
+          <mxGeometry y="50" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_appeal_f2" value="    reg_number : VARCHAR(50) [ВХ-2026/XXXX-КАНЦ]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_appeal">
+          <mxGeometry y="72" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_appeal_f3" value="    anonymous_token : VARCHAR(32) [TK-XXXX-KZ]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_appeal">
+          <mxGeometry y="94" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_appeal_f4" value="    is_anonymous : BOOLEAN" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_appeal">
+          <mxGeometry y="116" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_appeal_f5" value="    applicant_fio : VARCHAR(200) [NULL if anon]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_appeal">
+          <mxGeometry y="138" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_appeal_f6" value="    raw_text : TEXT [Описание проблемы]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_appeal">
+          <mxGeometry y="160" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_appeal_f7" value="    formal_statement : TEXT [Фабула от ИИ]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_appeal">
+          <mxGeometry y="182" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_appeal_f8" value="    category : VARCHAR(100) [СИЗ, Оплата, Труд]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_appeal">
+          <mxGeometry y="204" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_appeal_f9" value="    risk_level : VARCHAR(20) [RED, YELLOW, GREEN]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_appeal">
+          <mxGeometry y="226" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_appeal_f10" value="    status : VARCHAR(40) [REGISTERED, IN_WORK, RESOLVED]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_appeal">
+          <mxGeometry y="248" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_appeal_f11" value="    registered_at : TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_appeal">
+          <mxGeometry y="270" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_questions" value="&lt;b&gt;AI_DYNAMIC_QUESTION&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#00468C;fontColor=#ffffff;strokeColor=#003366;rounded=1;shadow=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="860" y="60" width="300" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="e_questions_f0" value="PK  id : UUID" style="text;strokeColor=none;fillColor=#EBF3FA;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontColor=#00468C;fontSize=11;" vertex="1" parent="e_questions">
+          <mxGeometry y="28" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_questions_f1" value="FK  appeal_id : UUID" style="text;strokeColor=none;fillColor=#F8F9FA;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;fontColor=#555555;fontSize=11;" vertex="1" parent="e_questions">
+          <mxGeometry y="50" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_questions_f2" value="    question_order : INT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_questions">
+          <mxGeometry y="72" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_questions_f3" value="    question_text : VARCHAR(500)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_questions">
+          <mxGeometry y="94" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_questions_f4" value="    selected_answer : VARCHAR(500)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_questions">
+          <mxGeometry y="116" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_questions_f5" value="    generated_at : TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_questions">
+          <mxGeometry y="138" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_routing" value="&lt;b&gt;ROUTING_ASSIGNMENT&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#00468C;fontColor=#ffffff;strokeColor=#003366;rounded=1;shadow=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="440" y="440" width="320" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="e_routing_f0" value="PK  id : UUID" style="text;strokeColor=none;fillColor=#EBF3FA;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontColor=#00468C;fontSize=11;" vertex="1" parent="e_routing">
+          <mxGeometry y="28" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_routing_f1" value="FK  appeal_id : UUID" style="text;strokeColor=none;fillColor=#F8F9FA;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;fontColor=#555555;fontSize=11;" vertex="1" parent="e_routing">
+          <mxGeometry y="50" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_routing_f2" value="FK  assigned_to_user_id : UUID" style="text;strokeColor=none;fillColor=#F8F9FA;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;fontColor=#555555;fontSize=11;" vertex="1" parent="e_routing">
+          <mxGeometry y="72" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_routing_f3" value="    assigned_department : VARCHAR(150)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_routing">
+          <mxGeometry y="94" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_routing_f4" value="    is_first_recipient : BOOLEAN" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_routing">
+          <mxGeometry y="116" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_routing_f5" value="    anti_conflict_checked : BOOLEAN" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_routing">
+          <mxGeometry y="138" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_routing_f6" value="    status : VARCHAR(40)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_routing">
+          <mxGeometry y="160" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_routing_f7" value="    assigned_at : TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_routing">
+          <mxGeometry y="182" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sla" value="&lt;b&gt;SLA_LIFECYCLE_TRACKER&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#00468C;fontColor=#ffffff;strokeColor=#003366;rounded=1;shadow=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="860" y="300" width="300" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sla_f0" value="PK  id : UUID" style="text;strokeColor=none;fillColor=#EBF3FA;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontColor=#00468C;fontSize=11;" vertex="1" parent="e_sla">
+          <mxGeometry y="28" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sla_f1" value="FK  appeal_id : UUID" style="text;strokeColor=none;fillColor=#F8F9FA;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;fontColor=#555555;fontSize=11;" vertex="1" parent="e_sla">
+          <mxGeometry y="50" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sla_f2" value="    normative_days : INT [5 дней / 24ч]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_sla">
+          <mxGeometry y="72" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sla_f3" value="    target_deadline : TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_sla">
+          <mxGeometry y="94" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sla_f4" value="    warning_24h_sent : BOOLEAN" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_sla">
+          <mxGeometry y="116" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sla_f5" value="    is_overdue : BOOLEAN" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_sla">
+          <mxGeometry y="138" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sla_f6" value="    escalated_to_executive_id : UUID" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_sla">
+          <mxGeometry y="160" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sla_f7" value="    resolved_at : TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_sla">
+          <mxGeometry y="182" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_safe_chat" value="&lt;b&gt;SAFE_TOKEN_CHAT_MESSAGE&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#00468C;fontColor=#ffffff;strokeColor=#003366;rounded=1;shadow=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="860" y="580" width="300" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="e_safe_chat_f0" value="PK  id : UUID" style="text;strokeColor=none;fillColor=#EBF3FA;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontColor=#00468C;fontSize=11;" vertex="1" parent="e_safe_chat">
+          <mxGeometry y="28" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_safe_chat_f1" value="FK  appeal_id : UUID" style="text;strokeColor=none;fillColor=#F8F9FA;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;fontColor=#555555;fontSize=11;" vertex="1" parent="e_safe_chat">
+          <mxGeometry y="50" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_safe_chat_f2" value="    sender_type : VARCHAR(20) [APPLICANT, EXECUTOR]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_safe_chat">
+          <mxGeometry y="72" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_safe_chat_f3" value="    message_text : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_safe_chat">
+          <mxGeometry y="94" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_safe_chat_f4" value="    attachment_url : VARCHAR(500)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_safe_chat">
+          <mxGeometry y="116" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_safe_chat_f5" value="    created_at : TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_safe_chat">
+          <mxGeometry y="138" width="300" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ai_clusters" value="&lt;b&gt;AI_SYSTEMIC_CLUSTER&lt;/b&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#00468C;fontColor=#ffffff;strokeColor=#003366;rounded=1;shadow=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="440" y="720" width="320" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ai_clusters_f0" value="PK  id : UUID" style="text;strokeColor=none;fillColor=#EBF3FA;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;fontColor=#00468C;fontSize=11;" vertex="1" parent="e_ai_clusters">
+          <mxGeometry y="28" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ai_clusters_f1" value="FK  target_unit_id : UUID" style="text;strokeColor=none;fillColor=#F8F9FA;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;fontColor=#555555;fontSize=11;" vertex="1" parent="e_ai_clusters">
+          <mxGeometry y="50" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ai_clusters_f2" value="    cluster_title : VARCHAR(255) [Очаг СИЗ Запад]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_ai_clusters">
+          <mxGeometry y="72" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ai_clusters_f3" value="    appeals_count : INT [69 обращений]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_ai_clusters">
+          <mxGeometry y="94" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ai_clusters_f4" value="    strike_risk_score : DECIMAL(4,2)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_ai_clusters">
+          <mxGeometry y="116" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ai_clusters_f5" value="    executive_summary : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_ai_clusters">
+          <mxGeometry y="138" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ai_clusters_f6" value="    recommended_action : TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontColor=#212529;fontSize=11;" vertex="1" parent="e_ai_clusters">
+          <mxGeometry y="160" width="320" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="r_org_appeal" value="1 : N (Филиал к обращениям)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=ERmany;startArrow=ERone;strokeColor=#00468C;strokeWidth=2;" edge="1" parent="1" source="e_org" target="e_appeal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_appeal_questions" value="1 : N (Уточняющие вопросы ИИ)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=ERmany;startArrow=ERone;strokeColor=#00468C;strokeWidth=2;" edge="1" parent="1" source="e_appeal" target="e_questions">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_appeal_routing" value="1 : N (Маршрутизация исполнителям)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=ERmany;startArrow=ERone;strokeColor=#00468C;strokeWidth=2;" edge="1" parent="1" source="e_appeal" target="e_routing">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_appeal_sla" value="1 : 1 (Контроль дедлайна SLA)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=ERmany;startArrow=ERone;strokeColor=#00468C;strokeWidth=2;" edge="1" parent="1" source="e_appeal" target="e_sla">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_appeal_chat" value="1 : N (Защищенная переписка по токену)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=ERmany;startArrow=ERone;strokeColor=#00468C;strokeWidth=2;" edge="1" parent="1" source="e_appeal" target="e_safe_chat">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_user_routing" value="1 : N (Назначенные тикеты)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=ERmany;startArrow=ERone;strokeColor=#00468C;strokeWidth=2;" edge="1" parent="1" source="e_keycloak" target="e_routing">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_unit_cluster" value="1 : N (Очаги напряженности филиала)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=ERmany;startArrow=ERone;strokeColor=#00468C;strokeWidth=2;" edge="1" parent="1" source="e_org" target="e_ai_clusters">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

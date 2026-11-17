@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Temporary scratch & logs
+scratch/
+tmp/
+*.log
+.env
+
+# Large media
+*.mp4
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.gemini/

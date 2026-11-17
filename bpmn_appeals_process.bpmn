@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='utf-8'?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" id="Definitions_HybridAppealsAndPulse" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.20.0">
+  <bpmn:collaboration id="Collaboration_Hybrid">
+    <bpmn:participant id="Participant_Hybrid" name="АО «Казахтелеком» — Гибридный процесс: Пульс-опросы, CDN-чекин, прием жалоб и контроль SLA" processRef="Process_Hybrid" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_Hybrid" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_Hybrid">
+      <bpmn:lane id="Lane_Employee" name="Сотрудник (CDN-пользователь)">
+        <bpmn:flowNodeRef>StartEvent_CDN</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ViewNudge</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_UserChoice</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_AnswerPulse</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_DirectFormFill</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_DescribeProblem</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_AnswerQuestions</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SelectAnonymity</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_TrackStatus</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_Emp</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_AI_Core" name="ИИ-Ассистент (Чекин, Опросник, Аналитика)">
+        <bpmn:flowNodeRef>Task_AI_AnalyzePulse</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_PulseAlert</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_AI_ParseAndSurvey</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_AI_DraftStatement</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_AI_RouteAndSLA</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_AI_MonitorSLA</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_AI_GenerateReports</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Chancellery" name="Канцелярия (Lotus Notes / СЭД)">
+        <bpmn:flowNodeRef>Task_RegisterIncoming</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ForwardToRecipient</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Executor" name="Первый получатель (Исполнитель)">
+        <bpmn:flowNodeRef>Task_ReviewComplaint</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SubmitResponse</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Leadership" name="Руководство (Аналитика и Отчеты ИИ)">
+        <bpmn:flowNodeRef>Task_ViewExecutiveDashboard</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_Done</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="StartEvent_CDN" name="Авторизация через корпоративный CDN" />
+    <bpmn:userTask id="Task_ViewNudge" name="Чекин-окно: Все ли в порядке?" />
+    <bpmn:exclusiveGateway id="Gateway_UserChoice" name="Выбор действия" />
+    <bpmn:userTask id="Task_AnswerPulse" name="Прохождение квартального пульс-опроса" />
+    <bpmn:userTask id="Task_DirectFormFill" name="Самостоятельное заполнение формы обращения" />
+    <bpmn:userTask id="Task_DescribeProblem" name="Диалог с ИИ: описание проблемы своими словами" />
+    <bpmn:userTask id="Task_AnswerQuestions" name="Ответы на уточняющий опросник ИИ" />
+    <bpmn:userTask id="Task_SelectAnonymity" name="Выбор режима: Анонимно или Официально" />
+    <bpmn:userTask id="Task_TrackStatus" name="Проверка статуса по токену TK-XXXX-KZ" />
+    <bpmn:endEvent id="EndEvent_Emp" name="Вопрос решен, ответ получен" />
+    <bpmn:serviceTask id="Task_AI_AnalyzePulse" name="Анализ пульс-опроса (проверка низких баллов)" />
+    <bpmn:exclusiveGateway id="Gateway_PulseAlert" name="Балл &lt;= 2 или тревожный сигнал?" />
+    <bpmn:serviceTask id="Task_AI_ParseAndSurvey" name="Анализ проблемы и формирование опросника" />
+    <bpmn:serviceTask id="Task_AI_DraftStatement" name="Формирование официального заявления по ТК РК" />
+    <bpmn:serviceTask id="Task_AI_RouteAndSLA" name="Определение первого получателя (Conflict Guard) и SLA" />
+    <bpmn:serviceTask id="Task_AI_MonitorSLA" name="Контроль дедлайна (5 дней) и эскалация" />
+    <bpmn:serviceTask id="Task_AI_GenerateReports" name="Сводная аналитика климата и выявление очагов" />
+    <bpmn:userTask id="Task_RegisterIncoming" name="Регистрация в Канцелярии (ВХ-2026/XXXX-КАНЦ)" />
+    <bpmn:serviceTask id="Task_ForwardToRecipient" name="Передача дела назначенному исполнителю" />
+    <bpmn:userTask id="Task_ReviewComplaint" name="Рассмотрение и устранение нарушения" />
+    <bpmn:userTask id="Task_SubmitResponse" name="Направление ответа в срок SLA" />
+    <bpmn:userTask id="Task_ViewExecutiveDashboard" name="Изучение отчета ИИ и карты очагов напряженности" />
+    <bpmn:endEvent id="EndEvent_Done" name="Превентивные меры приняты Правлением" />
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_CDN" targetRef="Task_ViewNudge" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_ViewNudge" targetRef="Gateway_UserChoice" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Gateway_UserChoice" targetRef="Task_DescribeProblem" name="Да, есть проблема" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Gateway_UserChoice" targetRef="Task_AnswerPulse" name="Пройти пульс-опрос" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Gateway_UserChoice" targetRef="Task_DirectFormFill" name="Заполнить форму прямо" />
+    <bpmn:sequenceFlow id="Flow_P1" sourceRef="Task_AnswerPulse" targetRef="Task_AI_AnalyzePulse" />
+    <bpmn:sequenceFlow id="Flow_P2" sourceRef="Task_AI_AnalyzePulse" targetRef="Gateway_PulseAlert" />
+    <bpmn:sequenceFlow id="Flow_P3" sourceRef="Gateway_PulseAlert" targetRef="Task_DescribeProblem" name="Низкий балл (предложить обращение)" />
+    <bpmn:sequenceFlow id="Flow_P4" sourceRef="Gateway_PulseAlert" targetRef="Task_AI_GenerateReports" name="Норма (запечатать в пул)" />
+    <bpmn:sequenceFlow id="Flow_D1" sourceRef="Task_DirectFormFill" targetRef="Task_RegisterIncoming" />
+    <bpmn:sequenceFlow id="Flow_C1" sourceRef="Task_DescribeProblem" targetRef="Task_AI_ParseAndSurvey" />
+    <bpmn:sequenceFlow id="Flow_C2" sourceRef="Task_AI_ParseAndSurvey" targetRef="Task_AnswerQuestions" />
+    <bpmn:sequenceFlow id="Flow_C3" sourceRef="Task_AnswerQuestions" targetRef="Task_AI_DraftStatement" />
+    <bpmn:sequenceFlow id="Flow_C4" sourceRef="Task_AI_DraftStatement" targetRef="Task_SelectAnonymity" />
+    <bpmn:sequenceFlow id="Flow_C5" sourceRef="Task_SelectAnonymity" targetRef="Task_RegisterIncoming" />
+    <bpmn:sequenceFlow id="Flow_R1" sourceRef="Task_RegisterIncoming" targetRef="Task_AI_RouteAndSLA" />
+    <bpmn:sequenceFlow id="Flow_R2" sourceRef="Task_AI_RouteAndSLA" targetRef="Task_ForwardToRecipient" />
+    <bpmn:sequenceFlow id="Flow_R3" sourceRef="Task_ForwardToRecipient" targetRef="Task_ReviewComplaint" />
+    <bpmn:sequenceFlow id="Flow_R4" sourceRef="Task_ReviewComplaint" targetRef="Task_AI_MonitorSLA" />
+    <bpmn:sequenceFlow id="Flow_R5" sourceRef="Task_AI_MonitorSLA" targetRef="Task_SubmitResponse" />
+    <bpmn:sequenceFlow id="Flow_R6" sourceRef="Task_SubmitResponse" targetRef="Task_TrackStatus" />
+    <bpmn:sequenceFlow id="Flow_R7" sourceRef="Task_TrackStatus" targetRef="EndEvent_Emp" />
+    <bpmn:sequenceFlow id="Flow_A1" sourceRef="Task_SubmitResponse" targetRef="Task_AI_GenerateReports" />
+    <bpmn:sequenceFlow id="Flow_A2" sourceRef="Task_AI_GenerateReports" targetRef="Task_ViewExecutiveDashboard" />
+    <bpmn:sequenceFlow id="Flow_A3" sourceRef="Task_ViewExecutiveDashboard" targetRef="EndEvent_Done" />
+  </bpmn:process>
+</bpmn:definitions>

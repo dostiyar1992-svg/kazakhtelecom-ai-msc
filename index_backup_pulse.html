@@ -1,0 +1,2216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ИИ-Мониторинг Социального Климата | АО «Казахтелеком»</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Chart.js for Interactive Visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #00468C;       /* Казахтелеком Navy */
+      --primary-light: #EBF3FA;
+      --primary-hover: #00366D;
+      --accent: #0284C7;        /* Sky Blue */
+      --accent-purple: #6366F1; /* Purple Accent */
+      --success: #10B981;
+      --warning: #F59E0B;
+      --orange: #F97316;
+      --danger: #EF4444;
+      --bg-slate: #F8FAFC;
+      --border: #E2E8F0;
+      --text-main: #1E293B;
+      --text-muted: #64748B;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-slate);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* ==============================================================
+       TOP GLOBAL DEMO CONTROLLER BAR (ПАНЕЛЬ ДЕМОНСТРАЦИИ)
+       ============================================================== */
+    .demo-navbar {
+      background: #0B132B;
+      color: #FFFFFF;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid rgba(2, 132, 199, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .demo-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .demo-logo-badge {
+      background: linear-gradient(135deg, #00468C, #0284C7);
+      color: white;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(0, 70, 140, 0.5);
+    }
+
+    .demo-title-group h1 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #F8FAFC;
+      letter-spacing: -0.2px;
+    }
+
+    .demo-title-group span {
+      font-size: 11px;
+      color: #94A3B8;
+    }
+
+    .demo-nav-tabs {
+      display: flex;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px;
+      border-radius: var(--radius-full);
+      gap: 4px;
+    }
+
+    .demo-tab-btn {
+      background: transparent;
+      border: none;
+      color: #CBD5E1;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .demo-tab-btn:hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .demo-tab-btn.active {
+      background: linear-gradient(135deg, #00468C, #0284C7);
+      color: white;
+      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.4);
+    }
+
+    .demo-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34D399;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      font-weight: 600;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      background-color: #10B981;
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: pulse-ring 1.8s infinite cubic-bezier(0.66, 0, 0, 1);
+    }
+
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    /* Main Container */
+    .app-viewport {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+      background: #F1F5F9;
+      position: relative;
+    }
+
+    .screen-view {
+      display: none;
+      width: 100%;
+      max-width: 1320px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .screen-view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==============================================================
+       SCREEN 1: HR ASSISTANT DIALOG CHAT (LIKE IN VIDEO 115722)
+       ============================================================== */
+    .chat-layout-wrapper {
+      max-width: 880px;
+      margin: 0 auto;
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 120px);
+      overflow: hidden;
+    }
+
+    /* Chat Header - Exact replica from recording */
+    .chat-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #FFFFFF;
+      z-index: 10;
+    }
+
+    .chat-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-icon-back {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-icon-back:hover {
+      background: #F1F5F9;
+      color: var(--text-main);
+    }
+
+    .ai-avatar-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #E0F2FE;
+      color: #0284C7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      border: 1.5px solid #BAE6FD;
+      position: relative;
+    }
+
+    .ai-avatar-circle::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 10px;
+      height: 10px;
+      background: var(--success);
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+
+    .chat-header-title h2 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0F172A;
+      line-height: 1.2;
+    }
+
+    .chat-header-title span {
+      font-size: 11px;
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 500;
+    }
+
+    .chat-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-header-action {
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--text-muted);
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-header-action:hover {
+      background: #F8FAFC;
+      color: var(--text-main);
+      border-color: #CBD5E1;
+    }
+
+    /* Chat Messages Stream */
+    .chat-stream-body {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      background: #FAFAFC;
+    }
+
+    /* Collapsible Employee Info Card (as shown in frame 00:04 of video) */
+    .employee-profile-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 4px;
+      border-left: 4px solid var(--primary);
+    }
+
+    .emp-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .emp-card-header h3 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .emp-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px 16px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+      font-size: 12px;
+    }
+
+    .emp-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .emp-label {
+      color: var(--text-muted);
+      font-size: 10.5px;
+      font-weight: 500;
+    }
+
+    .emp-value {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .anon-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #ECFDF5;
+      color: #065F46;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      border: 1px solid #A7F3D0;
+    }
+
+    /* Message Rows */
+    .chat-msg-row {
+      display: flex;
+      gap: 12px;
+      max-width: 88%;
+    }
+
+    .chat-msg-row.ai {
+      align-self: flex-start;
+    }
+
+    .chat-msg-row.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .msg-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .msg-avatar.ai {
+      background: #E0F2FE;
+      color: #0284C7;
+      border: 1px solid #BAE6FD;
+    }
+
+    .msg-avatar.user {
+      background: #7C3AED;
+      color: white;
+    }
+
+    .msg-content-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .msg-bubble {
+      padding: 12px 16px;
+      border-radius: var(--radius-lg);
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+
+    .chat-msg-row.ai .msg-bubble {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      color: #1E293B;
+      border-top-left-radius: 4px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .chat-msg-row.user .msg-bubble {
+      background: linear-gradient(135deg, #7C3AED, #6366F1);
+      color: white;
+      border-top-right-radius: 4px;
+      box-shadow: 0 4px 10px rgba(99, 102, 241, 0.25);
+    }
+
+    .msg-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 10.5px;
+      color: #94A3B8;
+      padding: 0 4px;
+    }
+
+    .msg-reactions {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .reaction-btn {
+      background: transparent;
+      border: none;
+      color: #94A3B8;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+
+    .reaction-btn:hover {
+      color: var(--primary);
+      background: #EEF2F6;
+    }
+
+    /* Embedded Interactive Form Card (Like in recording) */
+    .embedded-survey-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      margin-top: 6px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .embedded-survey-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      border-bottom: 1px solid #F1F5F9;
+      padding-bottom: 10px;
+    }
+
+    .embedded-survey-header h4 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #0F172A;
+    }
+
+    .scale-rating-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin: 14px 0;
+    }
+
+    .scale-btn {
+      padding: 12px 6px;
+      border: 1.5px solid #E2E8F0;
+      border-radius: var(--radius-md);
+      background: #F8FAFC;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .scale-btn:hover {
+      border-color: var(--accent);
+      background: #F0F9FF;
+      transform: translateY(-2px);
+    }
+
+    .scale-btn.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      box-shadow: 0 0 0 2px rgba(0, 70, 140, 0.2);
+    }
+
+    .scale-score {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+      display: block;
+    }
+
+    .scale-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 2px;
+      display: block;
+    }
+
+    .btn-send-survey-step {
+      width: 100%;
+      background: linear-gradient(135deg, #00468C, #0284C7);
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 10px;
+    }
+
+    .btn-send-survey-step:hover {
+      opacity: 0.95;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+    }
+
+    /* Typing indicator */
+    .typing-bubble {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 14px;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      width: fit-content;
+    }
+
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      background: #94A3B8;
+      border-radius: 50%;
+      animation: typing 1.4s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typing {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-4px); }
+    }
+
+    /* Chat Footer Input Area - Replica from video */
+    .chat-input-container {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      background: #FFFFFF;
+    }
+
+    .chat-input-box {
+      display: flex;
+      align-items: center;
+      background: #F8FAFC;
+      border: 1px solid #CBD5E1;
+      border-radius: var(--radius-full);
+      padding: 4px 8px 4px 16px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .chat-input-box:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+      background: #FFFFFF;
+    }
+
+    .chat-input-field {
+      flex: 1;
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 13.5px;
+      color: var(--text-main);
+      padding: 8px 4px;
+    }
+
+    .chat-send-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #0284C7;
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .chat-send-btn:hover {
+      background: #0369A1;
+      transform: scale(1.05);
+    }
+
+    .chat-footer-brand {
+      text-align: center;
+      font-size: 10.5px;
+      color: #94A3B8;
+      margin-top: 6px;
+    }
+
+    /* ==============================================================
+       SCREEN 2: АДМИН-ПАНЕЛЬ HR (ОТДЕЛЬНОЕ ОКНО)
+       ============================================================== */
+    .admin-container {
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    .admin-header-strip {
+      background: #00468C;
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-title-h2 {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-badge-role {
+      background: rgba(255, 255, 255, 0.2);
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 20px;
+      padding: 24px;
+    }
+
+    .admin-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .admin-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #F1F5F9;
+    }
+
+    .admin-card-header h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0F172A;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      color: #1E293B;
+      outline: none;
+      background: #F8FAFC;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--accent);
+      background: #FFFFFF;
+    }
+
+    /* Timer Widget */
+    .timer-banner {
+      background: linear-gradient(135deg, #0F172A, #1E293B);
+      color: white;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .timer-digits {
+      font-size: 22px;
+      font-weight: 800;
+      font-family: monospace;
+      color: #38BDF8;
+      letter-spacing: 1px;
+    }
+
+    .btn-unseal-action {
+      width: 100%;
+      background: linear-gradient(135deg, #EA580C, #F97316);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-unseal-action:hover {
+      box-shadow: 0 4px 15px rgba(234, 88, 12, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* Admin Results Table */
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    .admin-table th {
+      background: #F1F5F9;
+      color: #475569;
+      padding: 10px 8px;
+      font-weight: 600;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .admin-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid #F1F5F9;
+      color: #1E293B;
+    }
+
+    .badge-zone {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      font-size: 10.5px;
+      font-weight: 700;
+    }
+
+    .zone-green { background: #D1FAE5; color: #065F46; }
+    .zone-yellow { background: #FEF3C7; color: #92400E; }
+    .zone-orange { background: #FFEDD5; color: #9A3412; }
+    .zone-red { background: #FEE2E2; color: #991B1B; }
+
+    /* AI Narrative Report Container */
+    .ai-narrative-box {
+      background: #F8FAFC;
+      border: 1px solid #CBD5E1;
+      border-left: 4px solid var(--accent-purple);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .ai-report-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #4338CA;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .ai-report-content {
+      font-size: 12.5px;
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    .ai-report-bullets {
+      margin-top: 8px;
+      padding-left: 18px;
+    }
+
+    .ai-report-bullets li {
+      margin-bottom: 4px;
+    }
+
+    /* ==============================================================
+       SCREEN 3: ПАНЕЛЬ РУКОВОДСТВА (EXECUTIVE DASHBOARD)
+       ============================================================== */
+    .exec-wrapper {
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    .exec-header {
+      background: #00468C;
+      color: white;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .exec-header-left h2 {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .exec-header-left p {
+      font-size: 12px;
+      color: #BAE6FD;
+    }
+
+    .exec-tab-switch {
+      display: flex;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 4px;
+      border-radius: var(--radius-md);
+      gap: 4px;
+    }
+
+    .exec-tab-btn {
+      border: none;
+      background: transparent;
+      color: #E2E8F0;
+      padding: 8px 16px;
+      font-size: 12.5px;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .exec-tab-btn.active {
+      background: #FFFFFF;
+      color: #00468C;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .exec-content-body {
+      padding: 24px;
+    }
+
+    /* Metric Stat Cards */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card.alert-border {
+      border-left: 4px solid var(--danger);
+    }
+
+    .stat-card.success-border {
+      border-left: 4px solid var(--success);
+    }
+
+    .stat-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .stat-val-flex {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin: 8px 0;
+    }
+
+    .stat-number {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0F172A;
+    }
+
+    .stat-subtrend {
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    .trend-up { color: var(--success); }
+    .trend-down { color: var(--danger); }
+
+    /* Text Summary Box in Dashboards (As requested in ТЗ) */
+    .executive-text-summary {
+      background: #F0F9FF;
+      border: 1px solid #BAE6FD;
+      border-left: 4px solid #0284C7;
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+
+    .summary-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #0369A1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .summary-text {
+      font-size: 12.5px;
+      color: #0C4A6E;
+      line-height: 1.6;
+    }
+
+    /* Charts Layout Grid */
+    .charts-grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .chart-box {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .chart-box h4 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #1E293B;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chart-canvas-wrapper {
+      position: relative;
+      height: 260px;
+      width: 100%;
+    }
+
+    /* ==============================================================
+       SCREEN 4: KEYCLOAK SSO AUTHENTICATION MODAL
+       ============================================================== */
+    .auth-overlay {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 140px);
+    }
+
+    .keycloak-card {
+      width: 100%;
+      max-width: 440px;
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      animation: popIn 0.3s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.96); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .kc-header {
+      background: #00468C;
+      color: white;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .kc-logo {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .kc-sub {
+      font-size: 12px;
+      color: #BAE6FD;
+    }
+
+    .kc-body {
+      padding: 24px;
+    }
+
+    .btn-sso-role {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      background: #F8FAFC;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 600;
+      color: #1E293B;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      transition: all 0.2s;
+    }
+
+    .btn-sso-role:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-sso-role span {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    /* Modal / Popups */
+    .qr-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .qr-modal.active { display: flex; }
+
+    .qr-box {
+      background: white;
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      max-width: 360px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== ПАНЕЛЬ НАВИГАЦИИ ПО ДЕМОНСТРАЦИИ ==================== -->
+  <header class="demo-navbar">
+    <div class="demo-brand">
+      <div class="demo-logo-badge">КТ СМСК</div>
+      <div class="demo-title-group">
+        <h1>ИИ-Мониторинг Социального Климата</h1>
+        <span>АО «Казахтелеком» • Демо-прототип для согласования</span>
+      </div>
+    </div>
+
+    <!-- Переключатель основных экранов ТЗ -->
+    <nav class="demo-nav-tabs">
+      <button class="demo-tab-btn active" onclick="switchScreen('screen-chat')">
+        💬 Чат сотрудника (Пульс)
+      </button>
+      <button class="demo-tab-btn" onclick="switchScreen('screen-admin')">
+        ⚙️ Админ-панель (HR)
+      </button>
+      <button class="demo-tab-btn" onclick="switchScreen('screen-executive')">
+        📊 Панель руководства
+      </button>
+      <button class="demo-tab-btn" onclick="switchScreen('screen-auth')">
+        🔐 Keycloak SSO
+      </button>
+    </nav>
+
+    <div class="demo-actions">
+      <div class="badge-live">
+        <div class="pulse-dot"></div>
+        On-Premise LLM
+      </div>
+      <button class="demo-tab-btn" style="background: rgba(255,255,255,0.15);" onclick="openQRModal()">
+        📱 QR-код опроса
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== ОСНОВНАЯ ОБЛАСТЬ ЭКРАНОВ ==================== -->
+  <main class="app-viewport">
+
+    <!-- ==================== ЭКРАН 1: ЧАТ СОТРУДНИКА (HR ASSISTANT) ==================== -->
+    <section id="screen-chat" class="screen-view active">
+      <div class="chat-layout-wrapper">
+        
+        <!-- Header (exact replica of video recording 115722) -->
+        <div class="chat-header">
+          <div class="chat-header-left">
+            <button class="btn-icon-back" title="Назад" onclick="resetChat()">←</button>
+            <div class="ai-avatar-circle">AI</div>
+            <div class="chat-header-title">
+              <h2>HR Assistant</h2>
+              <span>● Онлайн</span>
+            </div>
+          </div>
+          <div class="chat-header-actions">
+            <button class="btn-header-action" onclick="toggleLanguage()">
+              <span id="lang-indicator">🌐 Русский</span>
+            </button>
+            <button class="btn-header-action" onclick="resetChat()" title="Начать заново">
+              🔄 Новый диалог
+            </button>
+          </div>
+        </div>
+
+        <!-- Chat Stream Body -->
+        <div class="chat-stream-body" id="chat-messages-container">
+          
+          <!-- Collapsible Employee Info Card (from recording 00:04) -->
+          <div class="employee-profile-card">
+            <div class="emp-card-header" onclick="toggleEmpDetails()">
+              <h3>
+                <span>👤 Карточка сотрудника</span>
+                <span class="anon-pill-badge">🔒 100% Анонимно</span>
+              </h3>
+              <span id="emp-chevron" style="color: var(--text-muted); font-size: 12px;">▼ свернуть</span>
+            </div>
+            <div class="emp-grid" id="emp-grid-body">
+              <div class="emp-item">
+                <span class="emp-label">ФИО / Респондент:</span>
+                <span class="emp-value">Анонимный участник (ID #113240)</span>
+              </div>
+              <div class="emp-item">
+                <span class="emp-label">Подразделение:</span>
+                <span class="emp-value">Объединение «Дивизион „Сеть“» (ОДС)</span>
+              </div>
+              <div class="emp-item">
+                <span class="emp-label">Должность:</span>
+                <span class="emp-value">Электромонтер линейных сооружений связи</span>
+              </div>
+              <div class="emp-item">
+                <span class="emp-label">Регион:</span>
+                <span class="emp-value">Атырауская область / Городской узел связи</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message 1: AI Greeting -->
+          <div class="chat-msg-row ai">
+            <div class="msg-avatar ai">AI</div>
+            <div class="msg-content-wrapper">
+              <div class="msg-bubble">
+                Сәлеметсіз бе! Здравствуйте! Я HR-ассистент АО «Казахтелеком».<br><br>
+                Проводим регулярный экспресс-опрос по <strong>5 ключевым вопросам</strong> (~60 секунд). Ваше участие абсолютно добровольно и <strong>строго анонимно</strong> (ответы попадут в общий зашифрованный пул и будут вскрыты только по завершении срока).
+              </div>
+              <div class="msg-meta-row">
+                <span>11:48</span>
+                <div class="msg-reactions">
+                  <button class="reaction-btn">👍</button>
+                  <button class="reaction-btn">👎</button>
+                  <button class="reaction-btn">📋</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Container for Active Question Widget -->
+          <div id="dynamic-chat-dialog"></div>
+
+        </div>
+
+        <!-- Chat Bottom Input Bar (replica from recording) -->
+        <div class="chat-input-container">
+          <div class="chat-input-box">
+            <input type="text" id="chat-text-input" class="chat-input-field" placeholder="Напишите ответ или выберите оценку выше..." onkeypress="handleInputKeypress(event)">
+            <button class="chat-send-btn" onclick="submitTextInput()" title="Отправить">
+              ➤
+            </button>
+          </div>
+          <div class="chat-footer-brand">HR Assistant • АО «Казахтелеком» • Локальный ИИ</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== ЭКРАН 2: АДМИН-ПАНЕЛЬ HR ==================== -->
+    <section id="screen-admin" class="screen-view">
+      <div class="admin-container">
+        <div class="admin-header-strip">
+          <div class="admin-title-h2">
+            ⚙️ Админ-панель управления пульс-опросами
+            <span class="admin-badge-role">ROLE_ADMIN (Keycloak)</span>
+          </div>
+          <div style="font-size: 12px; color: #BAE6FD;">
+            Оператор: Медебекова А.Т. (Служба HR ЦА)
+          </div>
+        </div>
+
+        <div class="admin-grid">
+          <!-- Левая колонка: Настройка и статус опроса -->
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            
+            <!-- Карточка: Создание опроса -->
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3>📝 Настройка нового пульс-опроса</h3>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Название кампании:</label>
+                <input type="text" class="form-input" id="camp-title" value="Ежемесячный срез климата: ОДС и филиалы">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Целевой дивизион:</label>
+                <select class="form-select" id="camp-unit">
+                  <option value="ОДС">Объединение «Дивизион „Сеть“» (ОДС) — 8 420 чел.</option>
+                  <option value="ДРБ">Дивизион по розничному бизнесу (ДРБ) — 4 100 чел.</option>
+                  <option value="ДКБ">Дивизион по корпоративному бизнесу (ДКБ)</option>
+                  <option value="ALL">Вся компания (20 000+ сотрудников)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Срок проведения опроса (дней):</label>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <input type="number" class="form-input" id="camp-days" value="7" min="1" max="30" style="width: 100px;">
+                  <span style="font-size: 12px; color: var(--text-muted);">дней (автоматический дедлайн)</span>
+                </div>
+              </div>
+              <button class="btn-send-survey-step" onclick="restartAdminCampaign()">
+                🚀 Запустить опрос и включить таймер
+              </button>
+            </div>
+
+            <!-- Карточка: Текущая кампания и таймер -->
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3>⏱️ Текущая активная кампания</h3>
+                <span class="badge-zone zone-yellow">В процессе сбора</span>
+              </div>
+              
+              <div class="timer-banner">
+                <div>
+                  <div style="font-size: 11px; color: #94A3B8; text-transform: uppercase;">Осталось до вскрытия:</div>
+                  <div class="timer-digits" id="countdown-timer">05д 14ч 22м 08с</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 11px; color: #94A3B8;">Ответов в пуле:</div>
+                  <div style="font-size: 20px; font-weight: 800; color: #34D399;" id="pool-counter">1 842</div>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 14px; font-size: 12px; color: var(--text-muted);">
+                Ответы поступают в зашифрованный буфер. Детальный просмотр заблокирован до окончания срока N дней в целях 100% анонимности.
+              </div>
+
+              <!-- Кнопка вскрытия ответов ИИ -->
+              <button class="btn-unseal-action" id="btn-unseal" onclick="triggerAIUnsealing()">
+                🔓 Вскрыть ответы и провести ИИ-анализ
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Правая колонка: Итоги анализа ИИ (Таблица + Отчет) -->
+          <div class="admin-card" style="display: flex; flex-direction: column;">
+            <div class="admin-card-header">
+              <h3>📊 Итоги анализа ИИ (по завершении срока)</h3>
+              <span class="badge-zone zone-green" id="analysis-status-pill">Готово к изучению</span>
+            </div>
+
+            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">
+              Пакетная обработка 1 842 ответов завершена локальной моделью Qwen 2.5 (On-Premise).
+            </div>
+
+            <!-- Таблица итогов -->
+            <div style="overflow-x: auto;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Подразделение</th>
+                    <th>Ответов</th>
+                    <th>Зарплата</th>
+                    <th>Связь</th>
+                    <th>Безоп.</th>
+                    <th>Доверие</th>
+                    <th>Давление</th>
+                    <th>OCI</th>
+                    <th>Зона</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>ОДС (Западная РДТ)</strong></td>
+                    <td>412</td>
+                    <td>2.1</td>
+                    <td>2.4</td>
+                    <td>2.2</td>
+                    <td>3.1</td>
+                    <td>3.8</td>
+                    <td><strong>41%</strong></td>
+                    <td><span class="badge-zone zone-red">Красная</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>ОДС (Восточная РДТ)</strong></td>
+                    <td>320</td>
+                    <td>2.6</td>
+                    <td>2.8</td>
+                    <td>2.9</td>
+                    <td>3.4</td>
+                    <td>3.2</td>
+                    <td><strong>54%</strong></td>
+                    <td><span class="badge-zone zone-orange">Оранжевая</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>ДРБ (Контакт-центры)</strong></td>
+                    <td>510</td>
+                    <td>3.2</td>
+                    <td>3.6</td>
+                    <td>3.8</td>
+                    <td>3.9</td>
+                    <td>2.4</td>
+                    <td><strong>68%</strong></td>
+                    <td><span class="badge-zone zone-yellow">Желтая</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>СФ (Сервисная фабрика)</strong></td>
+                    <td>340</td>
+                    <td>3.8</td>
+                    <td>4.1</td>
+                    <td>4.2</td>
+                    <td>4.3</td>
+                    <td>1.6</td>
+                    <td><strong>79%</strong></td>
+                    <td><span class="badge-zone zone-green">Зеленая</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>ДЦБ (Цифровой дивизион)</strong></td>
+                    <td>260</td>
+                    <td>4.4</td>
+                    <td>4.5</td>
+                    <td>4.6</td>
+                    <td>4.7</td>
+                    <td>1.2</td>
+                    <td><strong>86%</strong></td>
+                    <td><span class="badge-zone zone-green">Зеленая</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Развернутый текстовый отчет от ИИ (как указано в ТЗ) -->
+            <div class="ai-narrative-box">
+              <div class="ai-report-title">
+                ✨ Развернутый аналитический отчет ИИ (Executive AI Report)
+              </div>
+              <div class="ai-report-content" id="ai-narrative-text">
+                <strong>1. Общая оценка социального климата:</strong> Интегральный индекс OCI по опросу составил <strong>65.6%</strong>. Наблюдается резкая дифференциация между производственными бригадами ОДС (41-54%) и сервисными подразделениями (79-86%).<br><br>
+                <strong>2. Ключевые выявленные первопричины напряженности:</strong>
+                <ul class="ai-report-bullets">
+                  <li><strong>Отказы автотранспорта в районах (384 упоминания):</strong> Бригады АВР в Атырауской и Мангыстауской областях жалуются на задержку ремонта служебных УАЗ и невыплату компенсаций ГСМ.</li>
+                  <li><strong>Задержка зимних СИЗ (291 упоминание):</strong> Наступление холодов при отсутствии выданной зимней обуви на складах Западной РДТ.</li>
+                  <li><strong>Давление начальников участков (142 упоминания):</strong> Высокий балл по шкале давления (Q5 = 3.8) в ряде районных узлов телекоммуникаций. Сотрудники опасаются говорить о поломках из-за угроз депремирования.</li>
+                </ul>
+                <strong>3. Рекомендация для руководства:</strong> Инициировать адресную ревизию автобаз ОДС и провести открытый брифинг Омбудсмена в Западном регионе.
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ЭКРАН 3: ПАНЕЛЬ РУКОВОДСТВА (EXECUTIVE DASHBOARD) ==================== -->
+    <section id="screen-executive" class="screen-view">
+      <div class="exec-wrapper">
+        <div class="exec-header">
+          <div class="exec-header-left">
+            <h2>Панель руководства АО «Казахтелеком»</h2>
+            <p>Мониторинг социально-трудовой устойчивости • Доступ: Члены Правления, Директора филиалов</p>
+          </div>
+          <!-- Переключатель двух разделов по ТЗ -->
+          <div class="exec-tab-switch">
+            <button class="exec-tab-btn active" id="tab-btn-srs" onclick="switchExecTab('srs')">
+              📘 Раздел: Дашборд SRS
+            </button>
+            <button class="exec-tab-btn" id="tab-btn-pulse" onclick="switchExecTab('pulse')">
+              ⚡ Раздел: Дашборд Пульс-опроса
+            </button>
+          </div>
+        </div>
+
+        <div class="exec-content-body">
+          
+          <!-- РАЗДЕЛ 1: ДАШБОРД SRS (ГОДОВОЙ ОТЧЕТ CSCC) -->
+          <div id="exec-tab-content-srs">
+            
+            <!-- Краткое текстовое описание дашборда SRS (требование ТЗ) -->
+            <div class="executive-text-summary">
+              <div class="summary-title">
+                📌 Краткое описание трендов исследования SRS (Samruk Research Services)
+              </div>
+              <div class="summary-text">
+                По итогам последнего годового исследования CSCC интегральный индекс SRS АО «Казахтелеком» вырос на <strong>+5 п.п. и достиг 64%</strong>. Положительную динамику обеспечивают высокий уровень социального спокойствия (<strong>81%</strong>) и вовлеченности менеджмента (<strong>90%</strong>). <br>
+                <strong>Главная зона риска:</strong> Индекс социального благополучия составляет <strong>34% (красная зона)</strong>. У рабочих профессий ОДС (вовлеченность 63%) преобладают нерешенные бытовые вопросы, износ инструмента и кредитная нагрузка.
+              </div>
+            </div>
+
+            <!-- KPI карточки SRS -->
+            <div class="metrics-row">
+              <div class="stat-card">
+                <div class="stat-label">Индекс SRS (Общий)</div>
+                <div class="stat-val-flex">
+                  <div class="stat-number">64%</div>
+                  <div class="stat-subtrend trend-up">▲ +5% к 2025 г.</div>
+                </div>
+                <span class="badge-zone zone-yellow">Умеренный риск</span>
+              </div>
+              <div class="stat-card success-border">
+                <div class="stat-label">Вовлеченность (ИВ)</div>
+                <div class="stat-val-flex">
+                  <div class="stat-number">70%</div>
+                  <div class="stat-subtrend trend-up">▲ +3% к 2025 г.</div>
+                </div>
+                <span class="badge-zone zone-green">Целевой бенчмарк</span>
+              </div>
+              <div class="stat-card alert-border">
+                <div class="stat-label">Благополучие (ИСБ)</div>
+                <div class="stat-val-flex">
+                  <div class="stat-number">34%</div>
+                  <div class="stat-subtrend trend-down">Критическая зона</div>
+                </div>
+                <span class="badge-zone zone-red">СИЗ, автобазы, оплата</span>
+              </div>
+              <div class="stat-card success-border">
+                <div class="stat-label">Социальное спокойствие</div>
+                <div class="stat-val-flex">
+                  <div class="stat-number">81%</div>
+                  <div class="stat-subtrend trend-up">▲ +6% к 2025 г.</div>
+                </div>
+                <span class="badge-zone zone-green">Стабильная обстановка</span>
+              </div>
+            </div>
+
+            <!-- Графики SRS -->
+            <div class="charts-grid-2col">
+              <div class="chart-box">
+                <h4>Динамика индексов SRS (2020–2026 гг.)</h4>
+                <div class="chart-canvas-wrapper">
+                  <canvas id="chartSRSTrend"></canvas>
+                </div>
+              </div>
+              <div class="chart-box">
+                <h4>Разрыв вовлеченности по категориям персонала</h4>
+                <div class="chart-canvas-wrapper">
+                  <canvas id="chartSRSCategories"></canvas>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- РАЗДЕЛ 2: ДАШБОРД ПУЛЬС-ОПРОСА (ОПЕРАТИВНЫЙ СРЕЗ) -->
+          <div id="exec-tab-content-pulse" style="display: none;">
+            
+            <!-- Краткое текстовое описание дашборда Пульс-опроса (требование ТЗ) -->
+            <div class="executive-text-summary" style="background: #FAF5FF; border-color: #E9D5FF; border-left-color: #9333EA;">
+              <div class="summary-title" style="color: #7E22CE;">
+                ⚡ Краткое резюме оперативного пульс-опроса (ИИ-анализ на текущую дату)
+              </div>
+              <div class="summary-text" style="color: #581C87;">
+                Сводный оперативный индекс климата (OCI) зафиксирован на уровне <strong>65.6%</strong>. Обеспечена 100% K-анонимность: срезы 4 удаленных сельских участков с числом ответов &lt; 5 автоматически объединены с районными узлами связи.<br>
+                <strong>Оперативный вывод:</strong> Вскрытие подтверждает высокую тревожность линейных кабельщиков ОДС по вопросам готовности спецтехники к зиме при сохранении высокого доверия руководству (74%).
+              </div>
+            </div>
+
+            <!-- Карточки пульса -->
+            <div class="metrics-row">
+              <div class="stat-card">
+                <div class="stat-label">Сводный индекс OCI</div>
+                <div class="stat-val-flex">
+                  <div class="stat-number">65.6%</div>
+                  <div class="stat-subtrend trend-up">▲ +1.4% за месяц</div>
+                </div>
+                <span class="badge-zone zone-yellow">Оперативный срез</span>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Участников диалога</div>
+                <div class="stat-val-flex">
+                  <div class="stat-number">1 842</div>
+                  <div style="font-size: 11px; color: var(--text-muted);">92% завершили опрос</div>
+                </div>
+                <span class="badge-zone zone-green">Выборка валидна</span>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">K-Анонимность (N ≥ 5)</div>
+                <div class="stat-val-flex">
+                  <div class="stat-number">100%</div>
+                  <div style="font-size: 11px; color: var(--success);">Защита соблюдена</div>
+                </div>
+                <span class="badge-zone zone-green">Деанонимизация искл.</span>
+              </div>
+              <div class="stat-card alert-border">
+                <div class="stat-label">Очагов напряжения</div>
+                <div class="stat-val-flex">
+                  <div class="stat-number">2</div>
+                  <div class="stat-subtrend trend-down">Западная и Вост. РДТ</div>
+                </div>
+                <span class="badge-zone zone-red">Требует мер HR</span>
+              </div>
+            </div>
+
+            <!-- Графики Пульса: Радар 5 осей и Тепловая карта регионов -->
+            <div class="charts-grid-2col">
+              <div class="chart-box">
+                <h4>5-осевой радар оперативного климата (OCI)</h4>
+                <div class="chart-canvas-wrapper">
+                  <canvas id="chartPulseRadar"></canvas>
+                </div>
+              </div>
+              <div class="chart-box">
+                <h4>Тепловой сплит по филиалам (Светофор)</h4>
+                <div class="chart-canvas-wrapper">
+                  <canvas id="chartBranchesBar"></canvas>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ЭКРАН 4: KEYCLOAK SSO ==================== -->
+    <section id="screen-auth" class="screen-view">
+      <div class="auth-overlay">
+        <div class="keycloak-card">
+          <div class="kc-header">
+            <div class="kc-logo">АО «КАЗАХТЕЛЕКОМ»</div>
+            <div class="kc-sub">Единый сервис аутентификации Keycloak SSO</div>
+          </div>
+          <div class="kc-body">
+            <div style="margin-bottom: 16px; font-size: 13px; color: var(--text-muted); text-align: center;">
+              Выберите профиль для безопасного входа по корпоративным ролям (OpenID Connect / OAuth2.0):
+            </div>
+
+            <button class="btn-sso-role" onclick="loginWithRole('admin')">
+              <div>
+                <strong>Вход: Администратор HR</strong>
+                <span>Роль: ROLE_ADMIN • Доступ: Админ-панель управления</span>
+              </div>
+              <span style="font-size: 16px;">🔑</span>
+            </button>
+
+            <button class="btn-sso-role" onclick="loginWithRole('executive')">
+              <div>
+                <strong>Вход: Член Правления / Руководство</strong>
+                <span>Роль: ROLE_EXECUTIVE • Доступ: Панель дашбордов</span>
+              </div>
+              <span style="font-size: 16px;">📊</span>
+            </button>
+
+            <button class="btn-sso-role" style="border-style: dashed; background: #F0FDF4;" onclick="loginWithRole('employee')">
+              <div>
+                <strong>Пройти опрос анонимно (Сотрудник)</strong>
+                <span>Без Keycloak • 100% анонимность • Ссылка / QR-код</span>
+              </div>
+              <span style="font-size: 16px;">💬</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== МОДАЛЬНОЕ ОКНО QR-КОДА ==================== -->
+  <div class="qr-modal" id="qr-modal" onclick="closeQRModal(event)">
+    <div class="qr-box" onclick="event.stopPropagation()">
+      <h3 style="font-size: 16px; color: #00468C; margin-bottom: 8px;">QR-код для плакатов на базах</h3>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+        Размещается в комнатах отдыха и автобазах ОДС. Сотрудник сканирует со смартфона и проходит опрос за 60 секунд.
+      </p>
+      <!-- SVG QR Code Replica -->
+      <svg width="180" height="180" viewBox="0 0 100 100" style="margin: 0 auto; display: block; border: 4px solid white; box-shadow: var(--shadow-sm);">
+        <rect width="100" height="100" fill="white"/>
+        <!-- Corners -->
+        <rect x="5" y="5" width="25" height="25" fill="#00468C"/>
+        <rect x="9" y="9" width="17" height="17" fill="white"/>
+        <rect x="13" y="13" width="9" height="9" fill="#00468C"/>
+
+        <rect x="70" y="5" width="25" height="25" fill="#00468C"/>
+        <rect x="74" y="9" width="17" height="17" fill="white"/>
+        <rect x="78" y="13" width="9" height="9" fill="#00468C"/>
+
+        <rect x="5" y="70" width="25" height="25" fill="#00468C"/>
+        <rect x="9" y="74" width="17" height="17" fill="white"/>
+        <rect x="13" y="78" width="9" height="9" fill="#00468C"/>
+        <!-- Dummy pattern -->
+        <rect x="35" y="10" width="8" height="8" fill="#00468C"/>
+        <rect x="50" y="15" width="8" height="8" fill="#0284C7"/>
+        <rect x="35" y="35" width="30" height="30" fill="#00468C"/>
+        <rect x="42" y="42" width="16" height="16" fill="white"/>
+        <rect x="46" y="46" width="8" height="8" fill="#00468C"/>
+        <rect x="75" y="40" width="15" height="8" fill="#00468C"/>
+        <rect x="15" y="45" width="8" height="15" fill="#0284C7"/>
+        <rect x="40" y="75" width="20" height="8" fill="#00468C"/>
+        <rect x="70" y="70" width="18" height="18" fill="#0284C7"/>
+      </svg>
+      <div style="margin-top: 16px; display: flex; gap: 8px;">
+        <button class="btn-send-survey-step" onclick="copyLink()">📋 Скопировать ссылку</button>
+        <button class="btn-send-survey-step" style="background: #475569;" onclick="closeQRModal()">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ИНТЕРАКТИВНАЯ ЛОГИКА (JAVASCRIPT) ==================== -->
+  <script>
+    // 5 строго установленных вопросов пульс-опроса по ТЗ
+    const SURVEY_QUESTIONS = [
+      {
+        id: "Q1",
+        axis: "Q1_SALARY",
+        title_ru: "1. Моя зарплата позволяет комфортно покрывать основные расходы.",
+        title_kz: "1. Менің жалақым негізгі шығындарды еркін өтеуге мүмкіндік береді.",
+        type: "straight",
+        clarification_trigger: 2,
+        clarification_ru: "Мне жаль это слышать. Подскажите, роста расходов на что вы ощущаете сильнее всего в последнее время?",
+        clarification_kz: "Түсінікті. Соңғы кезде қай шығындардың өсуі қатты байқалады?"
+      },
+      {
+        id: "Q2",
+        axis: "Q2_FEEDBACK",
+        title_ru: "2. Существующие способы обращения к руководству реально помогают решать рабочие вопросы.",
+        title_kz: "2. Компаниядағы басшылыққа жүгіну тәсілдері жұмыс мәселелерін шешуге нақты көмектеседі.",
+        type: "straight",
+        clarification_trigger: 2,
+        clarification_ru: "Были ли случаи, когда ваше обращение осталось без ответа или было формальной отпиской?",
+        clarification_kz: "Өтінішіңіз жауапсыз қалған немесе формальды жауап берілген жағдайлар болды ма?"
+      },
+      {
+        id: "Q3",
+        axis: "Q3_SAFETY",
+        title_ru: "3. Я могу открыто высказывать замечания по условиям труда без опасений наказания со стороны руководства.",
+        title_kz: "3. Мен басшылық тарапынан қысым болады деп қорықпай, еңбек жағдайлары туралы ашық айта аламын.",
+        type: "straight",
+        clarification_trigger: 2,
+        clarification_ru: "Что именно вызывает опасения — реакция непосредственного мастера или коллег?",
+        clarification_kz: "Нақты не нәрсе алаңдатады — тікелей шебердің реакциясы ма әлде әріптестер ме?"
+      },
+      {
+        id: "Q4",
+        axis: "Q4_TRUST",
+        title_ru: "4. Я доверяю информации, поступающей от руководства компании.",
+        title_kz: "4. Мен компания басшылығынан келіп түсетін ақпаратқа сенім білдіремін.",
+        type: "straight",
+        clarification_trigger: 2,
+        clarification_ru: "Какой информации о будущем компании или филиала вам не хватает в первую очередь?",
+        clarification_kz: "Компанияның немесе филиалдың болашағы туралы қай ақпарат жетіспейді?"
+      },
+      {
+        id: "Q5",
+        axis: "Q5_PRESSURE",
+        title_ru: "5. Я испытываю сильное моральное давление со стороны начальства при выполнении работы.",
+        title_kz: "5. Мен күнделікті міндеттерімді орындау кезінде бастықтар тарапынан қатты моральдық қысым көремін.",
+        type: "inverted", // Обратная шкала!
+        clarification_trigger: 4, // Если выбрал 4 или 5 - это красный флаг!
+        clarification_ru: "Такое отношение недопустимо. Скажите, давление носит регулярный характер со стороны прямого руководителя?",
+        clarification_kz: "Бұл өте маңызды мәселе. Қысым тікелей басшы тарапынан ұдайы көрсетіле ме?"
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let currentLanguage = "ru"; // "ru" or "kz"
+    let userAnswers = {};
+    let isWaitingClarification = false;
+
+    // Инициализация при загрузке
+    document.addEventListener("DOMContentLoaded", () => {
+      renderActiveQuestionWidget();
+      initCharts();
+    });
+
+    // Переключение главных экранов
+    function switchScreen(screenId) {
+      document.querySelectorAll('.screen-view').forEach(el => el.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+
+      document.querySelectorAll('.demo-nav-tabs .demo-tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = Array.from(document.querySelectorAll('.demo-nav-tabs .demo-tab-btn')).find(b => {
+        const text = b.textContent.toLowerCase();
+        if (screenId.includes('chat') && text.includes('чат')) return true;
+        if (screenId.includes('admin') && text.includes('админ')) return true;
+        if (screenId.includes('executive') && text.includes('руководств')) return true;
+        if (screenId.includes('auth') && text.includes('keycloak')) return true;
+        return false;
+      });
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    // Авторизация по ролям (Keycloak)
+    function loginWithRole(role) {
+      if (role === 'admin') {
+        alert("Вход выполнен успешно через Keycloak SSO (Пользователь: Айман Медебекова, Роль: ROLE_ADMIN). Открывается Админ-панель.");
+        switchScreen('screen-admin');
+      } else if (role === 'executive') {
+        alert("Вход выполнен успешно через Keycloak SSO (Пользователь: Руководитель РДТ, Роль: ROLE_EXECUTIVE). Открывается Панель руководства.");
+        switchScreen('screen-executive');
+      } else {
+        alert("Анонимный режим респондента. Keycloak авторизация не требуется. Открывается диалоговое окно опроса.");
+        switchScreen('screen-chat');
+      }
+    }
+
+    // Переключение языков чата
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === 'ru' ? 'kz' : 'ru';
+      document.getElementById('lang-indicator').textContent = currentLanguage === 'ru' ? '🌐 Русский' : '🌐 Қазақша';
+      renderActiveQuestionWidget();
+    }
+
+    // Сворачивание профиля сотрудника
+    function toggleEmpDetails() {
+      const grid = document.getElementById('emp-grid-body');
+      const chev = document.getElementById('emp-chevron');
+      if (grid.style.display === 'none') {
+        grid.style.display = 'grid';
+        chev.textContent = '▼ свернуть';
+      } else {
+        grid.style.display = 'none';
+        chev.textContent = '▶ развернуть';
+      }
+    }
+
+    // Отрисовка текущего виджета вопроса в чате
+    function renderActiveQuestionWidget() {
+      const container = document.getElementById('dynamic-chat-dialog');
+      if (currentQuestionIndex >= SURVEY_QUESTIONS.length) {
+        container.innerHTML = `
+          <div class="chat-msg-row ai">
+            <div class="msg-avatar ai">AI</div>
+            <div class="msg-content-wrapper">
+              <div class="msg-bubble" style="border-left: 4px solid var(--success);">
+                🎉 <strong>Рахмет! Большое спасибо за искренность!</strong><br><br>
+                Вы успешно ответили на все 5 установленных вопросов. Ваши ответы запечатаны в общий пул кампании. Анализ будет проведен автоматически по завершении срока сбора.<br>
+                Желаем безопасной и комфортной работы!
+              </div>
+              <div class="msg-meta-row">
+                <span>Только что</span>
+                <span class="badge-zone zone-green">Статус: Завершено</span>
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      const q = SURVEY_QUESTIONS[currentQuestionIndex];
+      const qText = currentLanguage === 'ru' ? q.title_ru : q.title_kz;
+      const qNum = currentQuestionIndex + 1;
+
+      container.innerHTML = `
+        <div class="chat-msg-row ai">
+          <div class="msg-avatar ai">AI</div>
+          <div class="msg-content-wrapper" style="width: 100%;">
+            <div class="msg-bubble">
+              Вопрос <strong>${qNum} из 5</strong>:
+            </div>
+            
+            <!-- Встроенный интерактивный блок опроса (как в видео) -->
+            <div class="embedded-survey-card">
+              <div class="embedded-survey-header">
+                <h4>${qText}</h4>
+                <span style="font-size: 11px; color: var(--text-muted);">Шкала: 1 - 5</span>
+              </div>
+              
+              <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">
+                ${q.type === 'inverted' ? '⚠️ Обратная шкала: 1 - отлично (давления нет), 5 - очень сильное давление' : 'Выберите степень согласия:'}
+              </div>
+
+              <div class="scale-rating-grid">
+                <div class="scale-btn" onclick="selectScore(1)">
+                  <span class="scale-score">1</span>
+                  <span class="scale-label">${q.type === 'inverted' ? 'Нет' : 'Совсем нет'}</span>
+                </div>
+                <div class="scale-btn" onclick="selectScore(2)">
+                  <span class="scale-score">2</span>
+                  <span class="scale-label">Скорее нет</span>
+                </div>
+                <div class="scale-btn" onclick="selectScore(3)">
+                  <span class="scale-score">3</span>
+                  <span class="scale-label">Средне</span>
+                </div>
+                <div class="scale-btn" onclick="selectScore(4)">
+                  <span class="scale-score">4</span>
+                  <span class="scale-label">Скорее да</span>
+                </div>
+                <div class="scale-btn" onclick="selectScore(5)">
+                  <span class="scale-score">5</span>
+                  <span class="scale-label">${q.type === 'inverted' ? 'Постоянно' : 'Полностью'}</span>
+                </div>
+              </div>
+
+              <div style="font-size: 11px; color: #94A3B8; text-align: center;">
+                Или введите развернутый комментарий в поле ниже
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Выбор балла респондентом
+    function selectScore(score) {
+      const q = SURVEY_QUESTIONS[currentQuestionIndex];
+      userAnswers[q.axis] = score;
+
+      // Добавляем сообщение пользователя в ленту
+      appendUserMessage(`Оценка: ${score} из 5`);
+
+      // Проверяем триггер адаптивного уточнения
+      const isCritical = (q.type === 'straight' && score <= q.clarification_trigger) ||
+                         (q.type === 'inverted' && score >= q.clarification_trigger);
+
+      if (isCritical) {
+        showTypingIndicator(() => {
+          const clarifyText = currentLanguage === 'ru' ? q.clarification_ru : q.clarification_kz;
+          appendAIMessage(`⚠️ ${clarifyText}`);
+          isWaitingClarification = true;
+          // Фокус на ввод текста
+          document.getElementById('chat-text-input').focus();
+        });
+      } else {
+        // Переход к следующему вопросу
+        showTypingIndicator(() => {
+          currentQuestionIndex++;
+          renderActiveQuestionWidget();
+        });
+      }
+    }
+
+    // Ввод свободного текста
+    function submitTextInput() {
+      const input = document.getElementById('chat-text-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendUserMessage(text);
+      input.value = "";
+
+      showTypingIndicator(() => {
+        if (isWaitingClarification) {
+          appendAIMessage("Спасибо за важное уточнение! Этот комментарий зафиксирован и поможет выявить первопричину.");
+          isWaitingClarification = false;
+        }
+        currentQuestionIndex++;
+        renderActiveQuestionWidget();
+      });
+    }
+
+    function handleInputKeypress(e) {
+      if (e.key === 'Enter') submitTextInput();
+    }
+
+    function appendUserMessage(text) {
+      const stream = document.getElementById('chat-messages-container');
+      const widget = document.getElementById('dynamic-chat-dialog');
+      
+      const userRow = document.createElement('div');
+      userRow.className = 'chat-msg-row user';
+      userRow.innerHTML = `
+        <div class="msg-avatar user">НД</div>
+        <div class="msg-content-wrapper">
+          <div class="msg-bubble">${text}</div>
+          <div class="msg-meta-row" style="justify-content: flex-end;">
+            <span>11:49</span>
+          </div>
+        </div>
+      `;
+      stream.insertBefore(userRow, widget);
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    function appendAIMessage(text) {
+      const stream = document.getElementById('chat-messages-container');
+      const widget = document.getElementById('dynamic-chat-dialog');
+      
+      const aiRow = document.createElement('div');
+      aiRow.className = 'chat-msg-row ai';
+      aiRow.innerHTML = `
+        <div class="msg-avatar ai">AI</div>
+        <div class="msg-content-wrapper">
+          <div class="msg-bubble">${text}</div>
+          <div class="msg-meta-row">
+            <span>Только что</span>
+          </div>
+        </div>
+      `;
+      stream.insertBefore(aiRow, widget);
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    function showTypingIndicator(callback) {
+      const stream = document.getElementById('chat-messages-container');
+      const widget = document.getElementById('dynamic-chat-dialog');
+
+      const typing = document.createElement('div');
+      typing.id = 'temp-typing';
+      typing.className = 'chat-msg-row ai';
+      typing.innerHTML = `
+        <div class="msg-avatar ai">AI</div>
+        <div class="typing-bubble">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      `;
+      stream.insertBefore(typing, widget);
+      stream.scrollTop = stream.scrollHeight;
+
+      setTimeout(() => {
+        const el = document.getElementById('temp-typing');
+        if (el) el.remove();
+        if (callback) callback();
+      }, 700);
+    }
+
+    function resetChat() {
+      currentQuestionIndex = 0;
+      userAnswers = {};
+      isWaitingClarification = false;
+      document.querySelectorAll('.chat-msg-row.user').forEach(e => e.remove());
+      renderActiveQuestionWidget();
+    }
+
+    // ==================== ЛОГИКА АДМИН-ПАНЕЛИ ====================
+    function triggerAIUnsealing() {
+      const btn = document.getElementById('btn-unseal');
+      btn.innerHTML = "⏳ ИИ расшифровывает массив ответов...";
+      btn.disabled = true;
+
+      setTimeout(() => {
+        btn.innerHTML = "✅ Массив успешно вскрыт и проанализирован";
+        btn.style.background = "#10B981";
+        document.getElementById('analysis-status-pill').textContent = "Вскрыто • Анализ завершен";
+        document.getElementById('analysis-status-pill').className = "badge-zone zone-green";
+        alert("Пакетный анализ 1 842 ответов завершен нейросетью Qwen 2.5. Сводная таблица обновлена, развернутый отчет ИИ опубликован у администратора.");
+      }, 900);
+    }
+
+    function restartAdminCampaign() {
+      const title = document.getElementById('camp-title').value;
+      const days = document.getElementById('camp-days').value;
+      alert(`Кампания "${title}" успешно запущена! Срок сбора: ${days} дней. QR-код и ссылка активированы.`);
+      document.getElementById('btn-unseal').innerHTML = "🔓 Вскрыть ответы и провести ИИ-анализ";
+      document.getElementById('btn-unseal').disabled = false;
+      document.getElementById('btn-unseal').style.background = "linear-gradient(135deg, #EA580C, #F97316)";
+    }
+
+    // ==================== ЛОГИКА ПАНЕЛИ РУКОВОДСТВА ====================
+    function switchExecTab(tab) {
+      const srsTab = document.getElementById('exec-tab-content-srs');
+      const pulseTab = document.getElementById('exec-tab-content-pulse');
+      const btnSrs = document.getElementById('tab-btn-srs');
+      const btnPulse = document.getElementById('tab-btn-pulse');
+
+      if (tab === 'srs') {
+        srsTab.style.display = 'block';
+        pulseTab.style.display = 'none';
+        btnSrs.classList.add('active');
+        btnPulse.classList.remove('active');
+      } else {
+        srsTab.style.display = 'none';
+        pulseTab.style.display = 'block';
+        btnPulse.classList.add('active');
+        btnSrs.classList.remove('active');
+        // Ресайз графиков
+        if (window.radarChart) window.radarChart.resize();
+        if (window.branchesChart) window.branchesChart.resize();
+      }
+    }
+
+    // Инициализация графиков Chart.js
+    function initCharts() {
+      // 1. График тренда SRS 2020-2026
+      const ctxTrend = document.getElementById('chartSRSTrend');
+      if (ctxTrend) {
+        new Chart(ctxTrend, {
+          type: 'line',
+          data: {
+            labels: ['2020', '2021', '2022', '2023', '2024', '2025', '2026'],
+            datasets: [
+              {
+                label: 'Индекс SRS (%)',
+                data: [78, 72, 67, 67, 68, 59, 64],
+                borderColor: '#00468C',
+                backgroundColor: 'rgba(0, 70, 140, 0.1)',
+                fill: true,
+                tension: 0.3,
+                borderWidth: 3
+              },
+              {
+                label: 'Вовлеченность ИВ (%)',
+                data: [74, 71, 68, 69, 70, 67, 70],
+                borderColor: '#10B981',
+                borderDash: [5, 5],
+                tension: 0.3,
+                borderWidth: 2
+              },
+              {
+                label: 'Благополучие ИСБ (%)',
+                data: [45, 40, 36, 33, 35, 28, 34],
+                borderColor: '#EF4444',
+                tension: 0.3,
+                borderWidth: 2
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } },
+            scales: { y: { min: 20, max: 100 } }
+          }
+        });
+      }
+
+      // 2. График разрыва категорий персонала (SRS)
+      const ctxCat = document.getElementById('chartSRSCategories');
+      if (ctxCat) {
+        new Chart(ctxCat, {
+          type: 'bar',
+          data: {
+            labels: ['Руководители', 'Специалисты', 'Вспомогат.', 'Рабочие ОДС'],
+            datasets: [{
+              label: 'Вовлеченность (%)',
+              data: [90, 70, 77, 63],
+              backgroundColor: ['#00468C', '#0284C7', '#6366F1', '#F97316'],
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { min: 40, max: 100 } }
+          }
+        });
+      }
+
+      // 3. Радар 5 осей климата (Пульс)
+      const ctxRadar = document.getElementById('chartPulseRadar');
+      if (ctxRadar) {
+        window.radarChart = new Chart(ctxRadar, {
+          type: 'radar',
+          data: {
+            labels: ['Q1 Доход (54%)', 'Q2 Связь (62%)', 'Q3 Безопасность (68%)', 'Q4 Доверие (74%)', 'Q5 Без давления (71%)'],
+            datasets: [{
+              label: 'Текущий замер OCI (%)',
+              data: [54, 62, 68, 74, 71],
+              backgroundColor: 'rgba(99, 102, 241, 0.25)',
+              borderColor: '#6366F1',
+              borderWidth: 2.5,
+              pointBackgroundColor: '#6366F1'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { r: { min: 30, max: 100, ticks: { stepSize: 20 } } }
+          }
+        });
+      }
+
+      // 4. Светофор филиалов (Пульс)
+      const ctxBranch = document.getElementById('chartBranchesBar');
+      if (ctxBranch) {
+        window.branchesChart = new Chart(ctxBranch, {
+          type: 'bar',
+          data: {
+            labels: ['Западная РДТ', 'Восточная РДТ', 'Северная РДТ', 'Южная РДТ', 'Алматы', 'Астана', 'ДЦБ IT'],
+            datasets: [{
+              label: 'Индекс OCI (%)',
+              data: [41, 54, 66, 68, 78, 76, 86],
+              backgroundColor: ['#EF4444', '#F97316', '#F59E0B', '#F59E0B', '#10B981', '#10B981', '#10B981'],
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { min: 20, max: 100 } }
+          }
+        });
+      }
+    }
+
+    // Модальное окно QR
+    function openQRModal() {
+      document.getElementById('qr-modal').classList.add('active');
+    }
+
+    function closeQRModal() {
+      document.getElementById('qr-modal').classList.remove('active');
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href);
+      alert("Анонимная ссылка на опрос скопирована в буфер обмена!");
+    }
+  </script>
+</body>
+</html>
